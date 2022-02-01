@@ -1,2 +1,2 @@
-![Snake](snake.png)
-![Pause](pause.png)
+![Snake](resources/snake.png)
+![Pause](resources/.png)
