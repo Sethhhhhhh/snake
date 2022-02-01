@@ -88,6 +88,10 @@ void    Game::update(void) {
         before = SDL_GetTicks();
 
 		handle_events();
+
+		if (_pause)
+			continue;
+
         render();
 		_snake->update();
 
@@ -137,6 +141,10 @@ void    Game::handle_events(void) {
 
 				case SDLK_d:
 					_snake->move(e_move::right);
+					break;
+				
+				case SDLK_p:
+					_pause = !_pause;
 					break;
             }
         }

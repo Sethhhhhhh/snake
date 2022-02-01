@@ -13,6 +13,7 @@ class Game {
         SDL_Renderer*                       _renderer;
         std::map<std::string, TTF_Font*>    _fonts;
         
+        bool                                _pause = false;
         bool                                _is_running = true;
         unsigned int                        _fps = 0;
         unsigned int                        _score = 3000;
