@@ -1,1 +1,2 @@
-![Screenshot](snake.png)
+![Snake](snake.png)
+![Pause](pause.png)
