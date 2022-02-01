@@ -19,6 +19,7 @@ class Snake {
         float           get_speed(void) const;
         void            set_random_food_pos(void);
         unsigned int    get_size(void) const;
+        e_move          get_move(void) const;
 
     private:
         Food*                       _food;

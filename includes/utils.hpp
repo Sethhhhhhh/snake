@@ -27,7 +27,8 @@ const int g_block			= g_screen_width / g_grid_width;
 
 /* Colors */
 
-const SDL_Color g_white   = {255, 255, 255};
-const SDL_Color g_black   = {10, 10, 10, 200};
+const SDL_Color g_white	= {255, 255, 255};
+const SDL_Color g_black	= {10, 10, 10, 200};
+const SDL_Color g_blue	= {36, 113, 163, 200};
 
 #endif

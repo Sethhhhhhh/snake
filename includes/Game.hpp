@@ -17,6 +17,9 @@ class Game {
         bool                                _is_running = true;
         unsigned int                        _fps = 0;
         unsigned int                        _score = 3000;
+
+        void    draw_input(void);
+        void    draw_pause(void);
     
     public:
         Game(void);

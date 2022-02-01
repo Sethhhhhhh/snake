@@ -28,7 +28,7 @@ class Text {
             _bg.x = 0;
             _bg.y = 0;
 
-            SDL_SetRenderDrawColor(_renderer, bg.b, bg.g, bg.r, bg.a);
+            SDL_SetRenderDrawColor(_renderer, bg.r, bg.g, bg.b, bg.a);
             SDL_FreeSurface(_surface);
         };
 

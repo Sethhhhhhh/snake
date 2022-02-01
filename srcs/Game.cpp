@@ -28,7 +28,9 @@ Game::Game(void) {
 	std::srand(time(NULL));
 
 	add_font("JetBrainsMono-Medium", 16);
+	add_font("JetBrainsMono-Medium", 20);
 	add_font("JetBrainsMono-Medium", 24);
+	add_font("JetBrainsMono-Medium", 40);
 
 	_snake = new Snake(_renderer, 0, 0);
 	
@@ -89,8 +91,11 @@ void    Game::update(void) {
 
 		handle_events();
 
-		if (_pause)
+		if (_pause) {
+			draw_pause();
+			SDL_RenderPresent(_renderer);
 			continue;
+		}
 
         render();
 		_snake->update();
@@ -151,6 +156,67 @@ void    Game::handle_events(void) {
     }
 
 	return;
+}
+
+void	Game::draw_input(void) {
+	e_move snake_move = _snake->get_move();
+
+	Text left = Text(
+		_renderer,
+		get_font("JetBrainsMono-Medium", 20),
+		"A",
+		g_white,
+		snake_move == e_move::left ? g_blue : g_black,
+		5
+	);
+	left.set_pos(5, g_screen_height - left.get_height() - 5);
+	left.draw();
+
+	Text down = Text(
+		_renderer,
+		get_font("JetBrainsMono-Medium", 20),
+		"S",
+		g_white,
+		snake_move == e_move::down ? g_blue : g_black,
+		5
+	);
+	down.set_pos(left.get_x() + left.get_width() + 5, g_screen_height - down.get_height() - 5);
+	down.draw();
+
+	Text right = Text(
+		_renderer,
+		get_font("JetBrainsMono-Medium", 20),
+		"D",
+		g_white,
+		snake_move == e_move::right ? g_blue : g_black,
+		5
+	);
+	right.set_pos(down.get_x() + down.get_width() + 5, g_screen_height - down.get_height() - 5);
+	right.draw();
+
+	Text up = Text(
+		_renderer,
+		get_font("JetBrainsMono-Medium", 20),
+		"D",
+		g_white,
+		snake_move == e_move::up ? g_blue : g_black,
+		5
+	);
+	up.set_pos(left.get_x() + left.get_width() + 5, down.get_y() - up.get_height() - 5);
+	up.draw();
+}
+
+void	Game::draw_pause(void) {
+	Text pause = Text(
+		_renderer,
+		get_font("JetBrainsMono-Medium", 40),
+		"PAUSE",
+		g_white,
+		g_black,
+		5
+	);
+	pause.set_pos(g_screen_width / 2 - pause.get_width() / 2, g_screen_height / 2 - pause.get_height() / 2);
+	pause.draw();
 }
 
 void    Game::render(void) {
@@ -219,6 +285,8 @@ void    Game::render(void) {
 	);
 	size.set_pos(0, speed.get_height());
 	size.draw();
+	
+	draw_input();
 
 	SDL_RenderPresent(_renderer);
 

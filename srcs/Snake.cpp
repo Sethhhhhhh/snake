@@ -109,6 +109,10 @@ void    Snake::update(void) {
 	
 }
 
+e_move	Snake::get_move(void) const {
+	return _move;
+}
+
 void    Snake::move(e_move move) {
     switch (move) {
 		case e_move::up:
