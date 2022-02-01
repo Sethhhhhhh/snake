@@ -92,8 +92,8 @@ void    Game::update(void) {
 		handle_events();
 
 		if (_pause) {
-			draw_pause();
-			SDL_RenderPresent(_renderer);
+			//draw_pause();
+			//SDL_RenderPresent(_renderer);
 			continue;
 		}
 
