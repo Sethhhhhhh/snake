@@ -1,18 +1,10 @@
 #include "Snake.hpp"
 
-Snake::Snake(SDL_Renderer* renderer, unsigned int x, unsigned int y) : _renderer(renderer) {
+Snake::Snake(SDL_Renderer* renderer) : _renderer(renderer) {
 	SDL_Point	head;
-	
-	// int	size = 25;
-	// for (int i = 0; i < size; i++) {
-	// 	head.x = x + size - i;
-	// 	head.y = y;
 
-	// 	_snake.push_back(head);
-	// }
-
-	head.x = x;
-	head.y = y;
+	head.x = 0;
+	head.y = 0;
 	_snake.push_back(head);
 	
 	_move = e_move::right;
@@ -26,8 +18,25 @@ Snake::Snake(SDL_Renderer* renderer, unsigned int x, unsigned int y) : _renderer
 }
 
 Snake::~Snake(void) {
-	// delete _food;
+	delete _food;
 	return;
+}
+
+void	Snake::init() {
+	_move = e_move::right;
+
+	_size = 1;
+	_snake.erase(_snake.begin(), _snake.end());
+
+	SDL_Point	head;
+
+	head.x = 0;
+	head.y = 0;
+	_snake.push_back(head);
+
+	set_random_food_pos();
+
+	_is_dead = false;
 }
 
 float	Snake::get_speed(void) const {
@@ -56,9 +65,19 @@ unsigned int	Snake::get_size(void) const {
 	return _size;
 }
 
+bool	Snake::is_dead(void) const {
+	return _is_dead;
+}
+
 void    Snake::update(void) {
 	static float	x = floorf(_snake.begin()->x);
 	static float	y = floorf(_snake.begin()->y);
+	
+	if (_is_dead) {
+		x = 0;
+		y = 0;
+		return;	
+	}
 	SDL_Point		pos;
 
     switch (_move) {
@@ -97,6 +116,12 @@ void    Snake::update(void) {
 		_last_move = _move;
 		_snake.insert(_snake.begin(), pos);
 		
+		for (std::vector<SDL_Point>::iterator body = ++_snake.begin(); body != _snake.end(); body++) {
+			if (pos.x == body->x && pos.y == body->y) {
+				_is_dead = true;
+				return;
+			}
+		}
 		if (pos.x != _food->get_pos().x || pos.y != _food->get_pos().y) {
 			_snake.pop_back();
 		}
@@ -105,7 +130,6 @@ void    Snake::update(void) {
 			set_random_food_pos();
 		}
 	}
-
 	
 }
 
@@ -157,8 +181,13 @@ void    Snake::render(void) {
 		block.x = body->x * g_block + 2;
 		block.y = body->y * g_block + 2;
 
-		if (i % 2) SDL_SetRenderDrawColor(_renderer, 41, 128, 185, 255);
-		else SDL_SetRenderDrawColor(_renderer, 52, 152, 219, 255);
+		if (_is_dead) {
+			SDL_SetRenderDrawColor(_renderer, 146, 43, 33, 255);
+		}
+		else {
+			if (i % 2) SDL_SetRenderDrawColor(_renderer, 41, 128, 185, 255);
+			else SDL_SetRenderDrawColor(_renderer, 52, 152, 219, 255);
+		}
 		SDL_RenderFillRect(_renderer, &block);
-	}	
+	}
 }

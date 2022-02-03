@@ -1,8 +1,6 @@
 #include "Game.hpp"
 
-Game::Game(void) {
-	
-	
+Game::Game(void) {	
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
 		std::cout << "Unable to initialize SDL." << SDL_GetError() << std::endl;
 		exit(EXIT_FAILURE);
@@ -32,7 +30,7 @@ Game::Game(void) {
 	add_font("JetBrainsMono-Medium", 24);
 	add_font("JetBrainsMono-Medium", 40);
 
-	_snake = new Snake(_renderer, 0, 0);
+	_snake = new Snake(_renderer);
 	
 	this->update();
 
@@ -50,6 +48,8 @@ Game::~Game(void) {
 	SDL_DestroyRenderer(_renderer);
 
 	SDL_Quit();
+
+	delete _snake;
 
 	return;
 }
@@ -92,8 +92,8 @@ void    Game::update(void) {
 		handle_events();
 
 		if (_pause) {
-			//draw_pause();
-			//SDL_RenderPresent(_renderer);
+			draw_pause();
+			SDL_RenderPresent(_renderer);
 			continue;
 		}
 
@@ -151,6 +151,11 @@ void    Game::handle_events(void) {
 				case SDLK_p:
 					_pause = !_pause;
 					break;
+
+				case SDLK_r:
+					if (_snake->is_dead())
+						_snake->init();
+					break;
             }
         }
     }
@@ -197,7 +202,7 @@ void	Game::draw_input(void) {
 	Text up = Text(
 		_renderer,
 		get_font("JetBrainsMono-Medium", 20),
-		"D",
+		"W",
 		g_white,
 		snake_move == e_move::up ? g_blue : g_black,
 		5
@@ -287,6 +292,31 @@ void    Game::render(void) {
 	size.draw();
 	
 	draw_input();
+
+	if (_snake->is_dead()) {
+		Text dead = Text(
+			_renderer,
+			get_font("JetBrainsMono-Medium", 40),
+			"DEFEAT",
+			g_white,
+			g_black,
+			5
+		);
+		dead.set_pos(g_screen_width / 2 - dead.get_width() / 2, g_screen_height / 2 - dead.get_height() / 2);
+		dead.draw();
+
+
+		Text restart = Text(
+			_renderer,
+			get_font("JetBrainsMono-Medium", 16),
+			"Press 'R' to restart the game.",
+			g_white,
+			g_black,
+			5
+		);
+		restart.set_pos(g_screen_width / 2 - restart.get_width() / 2, g_screen_height / 2 + dead.get_height());
+		restart.draw();
+	}
 
 	SDL_RenderPresent(_renderer);
 
